@@ -16,7 +16,7 @@ function App() {
       <header className="App-header">
         AutoComplete Search
       </header>
-      <AutoComplete suggestions={results} isLoading={true} />
+      <AutoComplete onSelectItem={() => {}} />
     </div>
   );
 }

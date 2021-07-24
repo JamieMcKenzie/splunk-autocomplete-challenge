@@ -1,10 +1,12 @@
-# Getting Started with Create React App
+# Search Input - Splunk Code Challenge
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Author: Jamie McKenzie
+
 ## Available Scripts
 
-In the project directory, you can run:
+To run the project:
 
 ### `yarn start`
 
