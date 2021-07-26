@@ -1,6 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
-import cx from 'classnames';
+import _, { findLastKey } from 'lodash';
 
 import { getSearchSuggestions } from './AutoComplete.service';
 import './AutoComplete.css';
@@ -10,38 +9,51 @@ interface IAutoCompleteProps {
 }
 
 interface IAutoCompleteState {
-  suggestions: string[];
+  suggestions?: string[];
+  isLoading: boolean;
 }
 
 class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteState> {
   constructor(props: IAutoCompleteProps) {
     super(props)
-    this.state = {suggestions: []};
+    this.state = {
+      isLoading: false,
+      suggestions: []
+    };
     this.onUserInput = this.onUserInput.bind(this);
-    
+  }
+
+  componentDidMount() {
+    this.setState({isLoading: false});
   }
   
-  controlClassnames = cx('control', {
-    ['is-loading']: true,
-  }); 
-
-  search = _.debounce(getSearchSuggestions, 500);
-
   onUserInput(e: React.ChangeEvent<HTMLInputElement>): void {
-    this.setState({suggestions: this.search(e.target.value)});
+    const userInput = e.target.value;
+    const fetchSuggestions = async () => {
+      const response  = await getSearchSuggestions(userInput)
+      return response;
+    }
+    fetchSuggestions().then((data: any) => {
+      const suggestions = data;
+      debugger;
+      this.setState({
+        isLoading: false,
+        suggestions
+      })  
+    })
   }
 
   select(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    prompt('You have selected ' + e.currentTarget.text)
+    alert('You have selected ' + e.currentTarget.text)
   }
 
-  render() {
+  render() {    
     return (
       <div className='wrapper'>
-        <div className={this.controlClassnames}>
+        <div className={`${this.state.isLoading ? 'is-loading' : ''} control`}>
           <div className='input-container'>
-            <input className='input-field' type='search' id='search-input' name='search'
-              aria-label='Search Box' onInput={this.onUserInput} />
+            <input autoComplete='off' className='input-field' type='search' id='search-input' name='search'
+              aria-label='Search Box' onInput={_.debounce(this.onUserInput, 500)} />
               <div className='icon-container'>
                 <i className='loader'></i>
             </div>

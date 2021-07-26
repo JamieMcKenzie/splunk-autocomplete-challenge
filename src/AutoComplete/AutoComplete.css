@@ -7,14 +7,10 @@
 
 .control {
   background-color: red;
-
-  input {
-    width: 100%;
-  }
 }
 
-.is-loading {
-  background-color: pink;
+.input-field {
+  width: 100%;
 }
 
 .list {
@@ -41,9 +37,14 @@ a.list-item {
 }
 
 .icon-container {
+  display: none;
   position: absolute;
   right: 10px;
   top: 5px;
+}
+
+.is-loading .icon-container {
+  display: block;
 }
 
 .loader {

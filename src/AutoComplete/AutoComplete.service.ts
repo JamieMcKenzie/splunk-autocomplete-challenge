@@ -1,7 +1,9 @@
+import { AxiosInstance } from 'axios';
+import _ from 'lodash';
 const axios = require('axios').default;
 
 const axiosInstance = axios.create({
-  baseURL: 'http://dry-cliffs-99602.herokuapp.com/api',
+  baseURL: 'https://dry-cliffs-99602.herokuapp.com/api',
   timeout: 1000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -9,25 +11,24 @@ const axiosInstance = axios.create({
   }
 });
 
-export const getSearchSuggestions = (userQuery: string): any => {
-  const params = {
-    q: userQuery,
-  }
+const getAxiosInstance = (): AxiosInstance => {
+  return axiosInstance
+}
 
+export const getSearchSuggestions = (userQuery: string): Promise<string[]> => {
   let results: string[];
-  console.log(Date.now() + 'happening laterrrr???');
-  console.log('user query:' + userQuery);
-  // return axiosInstance({
-  //   method: 'get',
-  //   url: '/items',
-  //   params
-  // }).
-  // then((response: string[]) => {
-  //   results = response;
-  //   console.log('results', results);
-  //   return results;
-  // }).catch((e: object) => {
-  //   return ['error'];
-  // });
-  return ['false', 'results']
+  return axiosInstance({
+    method: 'get',
+    url: '/items',
+    params: {
+      q: userQuery,
+    }
+  }).
+  then((response: any) => {
+    debugger;
+    return response.data;
+  }).catch((e: object) => {
+    return ['error'];
+  });
 };
+
