@@ -1,12 +1,7 @@
 .wrapper {
   position: relative;
   max-width: 50%;
-  margin: 0 auto;
-  background-color: pink;
-}
-
-.control {
-  background-color: red;
+  margin: 20px auto;
 }
 
 .input-field {
@@ -17,29 +12,31 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid grey;
-  background-color: lightgrey;
+  background-color: rgb(238, 234, 234);
 }
 
 a.list-item {
-  padding: .5rem;
-  color: blue;
+  padding: 10px;
+  color: rgb(67, 102, 148);
+  text-align: left;
+  border-bottom: .1px solid lightgray;
+  cursor: pointer;
 }
 
 .input-container {
-  height: 2rem;
+  height: 32px;
   width: 100%;
 }
 
 .input-field {
-  height: 2rem;
+  height: 32px;
   width: 100%;
 }
 
 .icon-container {
   display: none;
   position: absolute;
-  right: 10px;
+  right: 2px;
   top: 5px;
 }
 
@@ -52,9 +49,10 @@ a.list-item {
   height: 20px;
   width: 20px;
   display: inline-block;
-  animation: around 5.4s infinite;
+  animation: around 10s infinite;
 }
 
+/* Exercise specified that CSS was not a part of the evaluation, so I grabbed this wheel animation from an online CSS example and tweaked it a little */
 @keyframes around {
   0% {
     transform: rotate(0deg)
@@ -78,10 +76,10 @@ a.list-item {
   box-sizing: border-box;
   top: 0;
   left: 0;
-  animation: around 0.7s ease-in-out infinite;
+  animation: around 0.5s ease-in-out infinite;
 }
 
 .loader::after {
-  animation: around 0.7s ease-in-out 0.1s infinite;
+  animation: around 0.5s ease-in-out 0.1s infinite;
   background: transparent;
 }

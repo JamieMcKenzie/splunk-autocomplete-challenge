@@ -1,16 +1,16 @@
-import React from 'react';
-import _, { findLastKey } from 'lodash';
+import React from 'react'
+import _ from 'lodash'
 
-import { getSearchSuggestions } from './AutoComplete.service';
-import './AutoComplete.css';
+import { getSearchSuggestions } from './AutoComplete.service'
+import './AutoComplete.css'
 
 interface IAutoCompleteProps {
-  onSelectItem?: (value: string) => void;
+  onSelectItem?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 
 interface IAutoCompleteState {
-  suggestions?: string[];
-  isLoading: boolean;
+  isLoading: boolean
+  suggestions?: string[]
 }
 
 class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteState> {
@@ -19,32 +19,27 @@ class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteStat
     this.state = {
       isLoading: false,
       suggestions: []
-    };
-    this.onUserInput = this.onUserInput.bind(this);
-  }
+    }
 
-  componentDidMount() {
-    this.setState({isLoading: false});
+    this.onUserInput = this.onUserInput.bind(this)
   }
   
   onUserInput(e: React.ChangeEvent<HTMLInputElement>): void {
-    const userInput = e.target.value;
-    const fetchSuggestions = async () => {
-      const response  = await getSearchSuggestions(userInput)
-      return response;
+    this.setState({
+      isLoading: true,
+      suggestions: [],
+    })
+    // Clears suggestions and loading wheel if input field is cleared
+    if (!e.target.value) {
+      this.setState({ isLoading: false })
+      return;
     }
-    fetchSuggestions().then((data: any) => {
-      const suggestions = data;
-      debugger;
+    getSearchSuggestions(e.target.value).then((data: any) => {
       this.setState({
         isLoading: false,
-        suggestions
-      })  
+        suggestions: data,
+      })
     })
-  }
-
-  select(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    alert('You have selected ' + e.currentTarget.text)
   }
 
   render() {    
@@ -52,28 +47,36 @@ class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteStat
       <div className='wrapper'>
         <div className={`${this.state.isLoading ? 'is-loading' : ''} control`}>
           <div className='input-container'>
-            <input autoComplete='off' className='input-field' type='search' id='search-input' name='search'
-              aria-label='Search Box' onInput={_.debounce(this.onUserInput, 500)} />
-              <div className='icon-container'>
-                <i className='loader'></i>
+            {/* Disabling browser autocomplete so this autosuggestion isn't conflicting in the UI */}
+            <input
+              autoComplete='off'
+              className='input-field'
+              type='search' id='search-input'
+              name='search'
+              onChange={_.debounce(this.onUserInput, 500)} />
+            <div className='icon-container'>
+              <i className='loader'></i>
             </div>
           </div>
-          <button>Search</button>
+          {/* Submit button not included as part of this component - not included in the exercise example */}
+
         </div>
         {this.state.suggestions && 
+        // If this were my own feature, I would make this a <ul> with <li> elements, but the example displayed this as a div and <a> tags for each list item
+        // List only rendered if suggestions is populated with data
         <div className='list'>
           {this.state.suggestions.map((suggestion: string, index: number): JSX.Element => {
             return (
-              <a key={index} className='list-item' onClick={this.select}>
+              <a key={index} className='list-item' onClick={this.props.onSelectItem}>
                 {suggestion}
               </a>
-            );
+            )
           })}
         </div>
         }
-      </div>
-    );
+    </div>
+    )
   }
-};
+}
 
-export default AutoComplete;
+export default AutoComplete
