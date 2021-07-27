@@ -1,5 +1,5 @@
 import { cleanup } from '@testing-library/react'
-import { mount, shallow } from 'enzyme'
+import { shallow } from 'enzyme'
 import toJSON from 'enzyme-to-json'
 import axios, { AxiosResponse } from 'axios'
 import * as AutoCompleteService from './AutoComplete.service'
@@ -12,6 +12,7 @@ jest.mock('./AutoComplete.service', () => {
         getSearchSuggestions: jest.fn()
     }
 })
+
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
@@ -27,7 +28,7 @@ describe('snapshot of AutoComplete', () => {
 })
 
 describe('AutoComplete Component', () => {
-    const wrapper = mount(<AutoComplete onSelectItem={ mockSelectFunc } />)
+    const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
     
     it('renders with onSelectItem prop', () => {
         const props = { onSelectItem: mockSelectFunc }
@@ -55,7 +56,7 @@ describe('AutoComplete Component', () => {
 })
 
 describe('onSelectItem Func', () => {
-    const wrapper = mount(<AutoComplete onSelectItem={ mockSelectFunc } />)
+    const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
     wrapper.setState({
         isLoading: false,
         suggestions: mockedData,
@@ -73,10 +74,11 @@ describe('AutoCompleteService - getSearchSuggestions', () => {
         mockedData
       )
     const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
-    it('should update state when returned with results', () => {
+    it('should update state when api returned with results', () => {
         wrapper.find('input').simulate('change', event)
+        // force update/completion of call
         setTimeout(() => {
-        expect(wrapper.state('suggestions')).toEqual(mockedData)
+            expect(wrapper.state('suggestions')).toEqual(mockedData)
         }, 0);
     })
     it('should call axios get for api fetch', () => {
