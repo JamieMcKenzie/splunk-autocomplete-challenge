@@ -4,7 +4,6 @@ import toJSON from 'enzyme-to-json'
 
 import * as AutoCompleteService from './AutoComplete.service'
 import AutoComplete from './AutoComplete'
-import { doesNotReject } from 'assert'
 
 afterEach(cleanup)
 const mockSelectFunc = jest.fn()
@@ -18,7 +17,7 @@ const mockResponse = { data: mockedData }
 const event = { target: { value: 'query' } } as React.ChangeEvent<HTMLInputElement>
 
 describe('snapshot of AutoComplete', () => {
-    it("renders correctly", () => {
+    it("renders DOM correctly", () => {
         const tree = shallow(<AutoComplete onSelectItem={ mockSelectFunc }/>)
         expect(toJSON(tree)).toMatchSnapshot()
     })
@@ -32,7 +31,7 @@ describe('AutoComplete Component', () => {
         expect(wrapper.props().onSelectItem).toBeDefined
     })
 
-    it('state contains isLoading and suggestions', () => {
+    it('component instantiates state with isLoading and suggestions', () => {
         expect(wrapper.state('isLoading')).toBe(false)
         expect(wrapper.state('suggestions')).toBeUndefined
     })
