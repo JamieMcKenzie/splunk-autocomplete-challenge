@@ -1,7 +1,7 @@
-import React from 'react';
-import AutoComplete from './AutoComplete/AutoComplete';
+import React from 'react'
+import AutoComplete from './AutoComplete/AutoComplete'
 
-import './App.css';
+import './App.css'
 
 function App() {
   const select = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -15,7 +15,7 @@ function App() {
       </header>
       <AutoComplete onSelectItem={select} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

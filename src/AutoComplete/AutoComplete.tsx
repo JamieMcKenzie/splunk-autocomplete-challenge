@@ -5,7 +5,7 @@ import { getSearchSuggestions } from './AutoComplete.service'
 import './AutoComplete.css'
 
 interface IAutoCompleteProps {
-  onSelectItem?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+  onSelectItem: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 
 interface IAutoCompleteState {
@@ -18,21 +18,22 @@ class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteStat
     super(props)
     this.state = {
       isLoading: false,
-      suggestions: []
+      suggestions: undefined,
     }
 
     this.onUserInput = this.onUserInput.bind(this)
   }
   
+  // Method debounced as part of onInput event in render() - only called 500ms after last user input
   onUserInput(e: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({
       isLoading: true,
-      suggestions: [],
+      suggestions: undefined,
     })
     // Clears suggestions and loading wheel if input field is cleared
     if (!e.target.value) {
       this.setState({ isLoading: false })
-      return;
+      return
     }
     getSearchSuggestions(e.target.value).then((data: any) => {
       this.setState({
@@ -53,6 +54,7 @@ class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteStat
               className='input-field'
               type='search' id='search-input'
               name='search'
+              placeholder='Search'
               onChange={_.debounce(this.onUserInput, 500)} />
             <div className='icon-container'>
               <i className='loader'></i>
@@ -62,12 +64,12 @@ class AutoComplete extends React.Component<IAutoCompleteProps, IAutoCompleteStat
 
         </div>
         {this.state.suggestions && 
-        // If this were my own feature, I would make this a <ul> with <li> elements, but the example displayed this as a div and <a> tags for each list item
+        // If this were my own feature, I would make this a <ul> with <li> elements, but the example displayed this as a div and <a> tags (without hrefs) for each list item
         // List only rendered if suggestions is populated with data
         <div className='list'>
           {this.state.suggestions.map((suggestion: string, index: number): JSX.Element => {
             return (
-              <a key={index} className='list-item' onClick={this.props.onSelectItem}>
+              <a key={index} className='list-item' href='/' onClick={this.props.onSelectItem}>
                 {suggestion}
               </a>
             )
