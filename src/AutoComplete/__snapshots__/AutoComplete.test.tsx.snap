@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot of AutoComplete renders correctly 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className=" control"
+  >
+    <div
+      className="input-container"
+    >
+      <input
+        autoComplete="off"
+        className="input-field"
+        id="search-input"
+        name="search"
+        onChange={[Function]}
+        placeholder="Search"
+        type="search"
+      />
+      <div
+        className="icon-container"
+      >
+        <i
+          className="loader"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
