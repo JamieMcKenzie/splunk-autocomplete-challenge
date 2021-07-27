@@ -7,11 +7,3 @@ import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-const mockNoop = () => new Promise(() => {});
-
-jest.mock('axios', () => ({
-  default: mockNoop,
-  get: mockNoop,
-  create: mockNoop,
-}));

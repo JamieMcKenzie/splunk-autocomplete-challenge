@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react'
 import { mount, shallow } from 'enzyme'
 import toJSON from 'enzyme-to-json'
-
+import axios, { AxiosResponse } from 'axios'
 import * as AutoCompleteService from './AutoComplete.service'
 import AutoComplete from './AutoComplete'
 
@@ -12,8 +12,11 @@ jest.mock('./AutoComplete.service', () => {
         getSearchSuggestions: jest.fn()
     }
 })
+jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+
 const mockedData = [ 'result1', 'result2', 'result3' ]
-const mockResponse = { data: mockedData }
+const mockResponse = { data: mockedData } as AxiosResponse
 const event = { target: { value: 'query' } } as React.ChangeEvent<HTMLInputElement>
 
 describe('snapshot of AutoComplete', () => {
@@ -69,9 +72,17 @@ describe('AutoCompleteService - getSearchSuggestions', () => {
     (AutoCompleteService.getSearchSuggestions as jest.MockedFunction<typeof AutoCompleteService.getSearchSuggestions>).mockResolvedValueOnce(
         mockedData
       )
-      const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
-      wrapper.simulate('change', event)
-      setTimeout(() => {
+    const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
+    it('should update state when returned with results', () => {
+        wrapper.find('input').simulate('change', event)
+        setTimeout(() => {
         expect(wrapper.state('suggestions')).toEqual(mockedData)
-      }, 0);
+        }, 0);
+    })
+    it('should call axios get for api fetch', () => {
+        expect(axios.get).not.toHaveBeenCalled
+        mockedAxios.get.mockResolvedValue(mockResponse)
+        wrapper.find('input').simulate('change', event)
+        expect(axios.get).toHaveBeenCalled
+    })
 })
