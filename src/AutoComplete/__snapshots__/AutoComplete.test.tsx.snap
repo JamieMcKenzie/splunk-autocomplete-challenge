@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`snapshot of AutoComplete renders correctly 1`] = `
+exports[`snapshot of AutoComplete renders DOM correctly 1`] = `
 <div
   className="wrapper"
 >

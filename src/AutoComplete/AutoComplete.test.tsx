@@ -70,8 +70,8 @@ describe('AutoCompleteService - getSearchSuggestions', () => {
         mockedData
       )
       const wrapper = shallow(<AutoComplete onSelectItem={ mockSelectFunc } />)
+      wrapper.simulate('change', event)
       setTimeout(() => {
         expect(wrapper.state('suggestions')).toEqual(mockedData)
-        expect(wrapper).toMatchSnapshot();
       }, 0);
 })
